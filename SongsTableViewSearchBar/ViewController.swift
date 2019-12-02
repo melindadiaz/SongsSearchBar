@@ -24,7 +24,6 @@ class ViewController: UIViewController {
     }
     
     
-    
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -41,5 +40,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let detailViewController = segue.destination as? DetailViewController,
+        let indexPath = songTableView.indexPathForSelectedRow else {
+            return
+        }
+        detailViewController.navigationItem.title = songs[indexPath.row].artist
+        detailViewController.viewTwoSong = [songs[indexPath.row]]
+        
+        }
+    }
     
-}
+    
+
