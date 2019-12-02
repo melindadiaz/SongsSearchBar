@@ -10,18 +10,36 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var songSearch: UISearchBar!
+    
+    @IBOutlet weak var songTableView: UITableView!
+    
+    //This just grabs the data within the class, because of the static func
+    var songs = Song.loveSongs
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
+        songTableView.delegate = self
+        songTableView.dataSource = self
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
+    
+    
+    
 }
 
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        songs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "songCell") else { return UITableViewCell()}
+        
+         let info = songs[indexPath.row]
+        cell.textLabel!.text = info.artist
+        cell.detailTextLabel!.text = info.name
+        return cell
+    }
+    
+    
+}
