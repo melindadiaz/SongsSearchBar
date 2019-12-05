@@ -43,6 +43,16 @@ class ViewController: UIViewController {
     func setUp() {
         songs = Song.loveSongs
     }
+    
+    //this should not be in the extension because it is not part of a delegate
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+          guard let detailViewController = segue.destination as? DetailViewController,
+              let indexPath = songTableView.indexPathForSelectedRow else {
+                  return
+          }
+          detailViewController.navigationItem.title = songs[indexPath.row].name
+        detailViewController.ex = songs[indexPath.row]
+      }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -60,15 +70,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let detailViewController = segue.destination as? DetailViewController,
-            let indexPath = songTableView.indexPathForSelectedRow else {
-                return
-        }
-        detailViewController.navigationItem.title = songs[indexPath.row].artist
-        detailViewController.viewTwoSong = [songs[indexPath.row]]
-    }
 }
 
 
@@ -76,14 +77,20 @@ extension ViewController: UISearchBarDelegate {
     //has a bunch of optional methods in the palm of your hands
     
     //When the user presses the magnify glass or enter
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let updatedUserQuery = searchBar.text else {
-            return
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        guard let updatedUserQuery = searchBar.text else {
+//            return
+//        }
+//        userQuery = updatedUserQuery //Set the value of means equal
+//    }
+    
+    //this function is for when the user types a text the search changes as they type
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+// this is optional chaining
+    guard !searchText.isEmpty else {
+        songs = Song.loveSongs
+        return
         }
-        userQuery = updatedUserQuery //Set the value of means equal
-        print(userQuery)
+        userQuery = searchText
     }
-    //this is optional chaining
-    //        guard !searchBar.text?.isEmpty else {
-    //            songs = Song.loveSongs
 }
